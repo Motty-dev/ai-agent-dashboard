@@ -1,11 +1,35 @@
 {
   "activities": [
     {
+      "id": "git_66d52da95b49edcb7250fedafccf8ec7f12e981a",
+      "type": "git",
+      "title": "Git Commit",
+      "description": "Fix GitHub Pages deployment - copy dist files to root",
+      "timestamp": "2026-02-05T20:07:10.000Z",
+      "details": "Commit: 66d52da95b49edcb7250fedafccf8ec7f12e981a\nMessage: Fix GitHub Pages deployment - copy dist files to root\nDate: 2026-02-05 22:01:37 +0200"
+    },
+    {
+      "id": "git_8b94672c008dda07a14fc1e9bc6f6d1ce49b629d",
+      "type": "git",
+      "title": "Git Commit",
+      "description": "force pages rebuild",
+      "timestamp": "2026-02-05T20:07:10.000Z",
+      "details": "Commit: 8b94672c008dda07a14fc1e9bc6f6d1ce49b629d\nMessage: force pages rebuild\nDate: 2026-02-05 21:47:06 +0200"
+    },
+    {
+      "id": "git_a591150c2e247fc489abe18ba885f865634ac17f",
+      "type": "git",
+      "title": "Git Commit",
+      "description": "feat: add interactive TaskManager with drag-and-drop Kanban board - dnd-kit integration, priority badges, due dates, modal forms",
+      "timestamp": "2026-02-05T20:07:10.000Z",
+      "details": "Commit: a591150c2e247fc489abe18ba885f865634ac17f\nMessage: feat: add interactive TaskManager with drag-and-drop Kanban board - dnd-kit integration, priority badges, due dates, modal forms\nDate: 2026-02-05 21:17:14 +0200"
+    },
+    {
       "id": "git_faf97c11b26fa6c58d627bb2154542d339730444",
       "type": "git",
       "title": "Git Commit",
       "description": "feat: add TokenAnalytics with recharts - context usage, API calls, task progress charts",
-      "timestamp": "2026-02-05T19:16:37.000Z",
+      "timestamp": "2026-02-05T20:07:10.000Z",
       "details": "Commit: faf97c11b26fa6c58d627bb2154542d339730444\nMessage: feat: add TokenAnalytics with recharts - context usage, API calls, task progress charts\nDate: 2026-02-05 21:05:10 +0200"
     },
     {
@@ -13,7 +37,7 @@
       "type": "git",
       "title": "Git Commit",
       "description": "feat: add ActivityFeed component with real-time timeline",
-      "timestamp": "2026-02-05T19:16:37.000Z",
+      "timestamp": "2026-02-05T20:07:10.000Z",
       "details": "Commit: 7ec452ab5b2a1adb4ed6d65d67d4046ae153f5d0\nMessage: feat: add ActivityFeed component with real-time timeline\nDate: 2026-02-05 20:59:41 +0200"
     },
     {
@@ -21,7 +45,7 @@
       "type": "git",
       "title": "Git Commit",
       "description": "force rebuild",
-      "timestamp": "2026-02-05T19:16:37.000Z",
+      "timestamp": "2026-02-05T20:07:10.000Z",
       "details": "Commit: a1b8330f6bc4561610e4aa93e9444da546bffc70\nMessage: force rebuild\nDate: 2026-02-05 20:50:17 +0200"
     },
     {
@@ -29,7 +53,7 @@
       "type": "git",
       "title": "Git Commit",
       "description": "fix: update vite config for GitHub Pages deployment",
-      "timestamp": "2026-02-05T19:16:37.000Z",
+      "timestamp": "2026-02-05T20:07:10.000Z",
       "details": "Commit: 9b8d6c3e22df840de1ee407a42fe5c1aa9827b23\nMessage: fix: update vite config for GitHub Pages deployment\nDate: 2026-02-05 20:47:22 +0200"
     },
     {
@@ -37,7 +61,7 @@
       "type": "git",
       "title": "Git Commit",
       "description": "feat: connect real data - bot status now pulls from actual clawdbot config",
-      "timestamp": "2026-02-05T19:16:37.000Z",
+      "timestamp": "2026-02-05T20:07:10.000Z",
       "details": "Commit: 10d4c365c5f9ecd4c103b8bafee471a235515ada\nMessage: feat: connect real data - bot status now pulls from actual clawdbot config\nDate: 2026-02-05 20:32:26 +0200"
     },
     {
@@ -45,7 +69,7 @@
       "type": "git",
       "title": "Git Commit",
       "description": "feat: add real data API scripts for bot status",
-      "timestamp": "2026-02-05T19:16:37.000Z",
+      "timestamp": "2026-02-05T20:07:10.000Z",
       "details": "Commit: 837f4d549706f641940b8da7f045f44f093ad8eb\nMessage: feat: add real data API scripts for bot status\nDate: 2026-02-05 20:31:34 +0200"
     },
     {
@@ -53,113 +77,89 @@
       "type": "git",
       "title": "Git Commit",
       "description": "feat: add BotStatus component with real-time monitoring",
-      "timestamp": "2026-02-05T19:16:37.000Z",
+      "timestamp": "2026-02-05T20:07:10.000Z",
       "details": "Commit: 3a75c52c9a1f77121a561fe802fac6e14b7fb407\nMessage: feat: add BotStatus component with real-time monitoring\nDate: 2026-02-05 20:28:50 +0200"
     },
     {
-      "id": "git_0fa5a7088500e3d4ade3a6eb24ebbe387d1358c4",
-      "type": "git",
-      "title": "Git Commit",
-      "description": "feat: complete glassmorphism design system - all pages updated",
-      "timestamp": "2026-02-05T19:16:37.000Z",
-      "details": "Commit: 0fa5a7088500e3d4ade3a6eb24ebbe387d1358c4\nMessage: feat: complete glassmorphism design system - all pages updated\nDate: 2026-02-05 20:23:27 +0200"
-    },
-    {
-      "id": "git_061411548faea01468110d38aa01fb4415d4a404",
-      "type": "git",
-      "title": "Git Commit",
-      "description": "feat: add glassmorphism cards to AgentDataPage",
-      "timestamp": "2026-02-05T19:16:37.000Z",
-      "details": "Commit: 061411548faea01468110d38aa01fb4415d4a404\nMessage: feat: add glassmorphism cards to AgentDataPage\nDate: 2026-02-05 20:05:25 +0200"
-    },
-    {
-      "id": "git_67b95109571f64701dcb447594e9f6630a74ec74",
-      "type": "git",
-      "title": "Git Commit",
-      "description": "fix: update workflow to use dist directory",
-      "timestamp": "2026-02-05T19:16:37.000Z",
-      "details": "Commit: 67b95109571f64701dcb447594e9f6630a74ec74\nMessage: fix: update workflow to use dist directory\nDate: 2026-02-05 19:57:41 +0200"
-    },
-    {
-      "id": "file_api_fetch-data_js_1770318998",
+      "id": "file_public_api_activity_json_1770322030",
       "type": "file",
       "title": "File Modified",
-      "description": "api/fetch-data.js",
-      "timestamp": "2026-02-05T21:14:26.000Z",
-      "details": "File: api/fetch-data.js\nLast modified: 2026-02-05T21:14:26.000Z"
+      "description": "public/api/activity.json",
+      "timestamp": "2026-02-05T22:06:54.000Z",
+      "details": "File: public/api/activity.json\nLast modified: 2026-02-05T22:06:54.000Z"
     },
     {
-      "id": "file_dist_api_activity_json_1770318998",
+      "id": "file_public_api_sessions-status_json_1770322030",
       "type": "file",
       "title": "File Modified",
-      "description": "dist/api/activity.json",
-      "timestamp": "2026-02-05T21:04:42.000Z",
-      "details": "File: dist/api/activity.json\nLast modified: 2026-02-05T21:04:42.000Z"
+      "description": "public/api/sessions-status.json",
+      "timestamp": "2026-02-05T22:07:10.000Z",
+      "details": "File: public/api/sessions-status.json\nLast modified: 2026-02-05T22:07:10.000Z"
     },
     {
-      "id": "file_dist_api_sessions-status_json_1770318998",
+      "id": "file_public_api_tasks_json_1770322030",
       "type": "file",
       "title": "File Modified",
-      "description": "dist/api/sessions-status.json",
-      "timestamp": "2026-02-05T21:04:42.000Z",
-      "details": "File: dist/api/sessions-status.json\nLast modified: 2026-02-05T21:04:42.000Z"
+      "description": "public/api/tasks.json",
+      "timestamp": "2026-02-05T22:06:54.000Z",
+      "details": "File: public/api/tasks.json\nLast modified: 2026-02-05T22:06:54.000Z"
     },
     {
-      "id": "file_dist_api_token-stats_json_1770318998",
+      "id": "file_public_api_token-stats_json_1770322030",
       "type": "file",
       "title": "File Modified",
-      "description": "dist/api/token-stats.json",
-      "timestamp": "2026-02-05T21:04:42.000Z",
-      "details": "File: dist/api/token-stats.json\nLast modified: 2026-02-05T21:04:42.000Z"
+      "description": "public/api/token-stats.json",
+      "timestamp": "2026-02-05T22:06:54.000Z",
+      "details": "File: public/api/token-stats.json\nLast modified: 2026-02-05T22:06:54.000Z"
     },
     {
-      "id": "file_dist_assets_index-BM65oJa4_css_1770318998",
+      "id": "file_vite_config_ts_1770322030",
       "type": "file",
       "title": "File Modified",
-      "description": "dist/assets/index-BM65oJa4.css",
-      "timestamp": "2026-02-05T21:04:43.000Z",
-      "details": "File: dist/assets/index-BM65oJa4.css\nLast modified: 2026-02-05T21:04:43.000Z"
+      "description": "vite.config.ts",
+      "timestamp": "2026-02-05T22:06:32.000Z",
+      "details": "File: vite.config.ts\nLast modified: 2026-02-05T22:06:32.000Z"
     },
     {
-      "id": "cmd_0_1770318998",
+      "id": "cmd_0_1770322030",
       "type": "command",
       "title": "Command Executed",
       "description": "npm run build",
-      "timestamp": "2026-02-05T19:16:38.000Z",
-      "details": "Command: npm run build\nExecuted: 2026-02-05T19:16:38.000Z"
+      "timestamp": "2026-02-05T20:07:10.000Z",
+      "details": "Command: npm run build\nExecuted: 2026-02-05T20:07:10.000Z"
     },
     {
-      "id": "cmd_1_1770318998",
+      "id": "cmd_1_1770322030",
       "type": "command",
       "title": "Command Executed",
       "description": "git commit -m \"update\"",
-      "timestamp": "2026-02-05T19:11:38.000Z",
-      "details": "Command: git commit -m \"update\"\nExecuted: 2026-02-05T19:11:38.000Z"
+      "timestamp": "2026-02-05T20:02:10.000Z",
+      "details": "Command: git commit -m \"update\"\nExecuted: 2026-02-05T20:02:10.000Z"
     },
     {
-      "id": "cmd_2_1770318998",
+      "id": "cmd_2_1770322030",
       "type": "command",
       "title": "Command Executed",
       "description": "git push",
-      "timestamp": "2026-02-05T19:06:38.000Z",
-      "details": "Command: git push\nExecuted: 2026-02-05T19:06:38.000Z"
+      "timestamp": "2026-02-05T19:57:10.000Z",
+      "details": "Command: git push\nExecuted: 2026-02-05T19:57:10.000Z"
     },
     {
-      "id": "cmd_3_1770318998",
+      "id": "cmd_3_1770322030",
       "type": "command",
       "title": "Command Executed",
       "description": "ls -la",
-      "timestamp": "2026-02-05T19:01:38.000Z",
-      "details": "Command: ls -la\nExecuted: 2026-02-05T19:01:38.000Z"
+      "timestamp": "2026-02-05T19:52:10.000Z",
+      "details": "Command: ls -la\nExecuted: 2026-02-05T19:52:10.000Z"
     },
     {
-      "id": "cmd_4_1770318998",
+      "id": "cmd_4_1770322030",
       "type": "command",
       "title": "Command Executed",
       "description": "cd ai-agent-dashboard",
-      "timestamp": "2026-02-05T18:56:38.000Z",
-      "details": "Command: cd ai-agent-dashboard\nExecuted: 2026-02-05T18:56:38.000Z"
+      "timestamp": "2026-02-05T19:47:10.000Z",
+      "details": "Command: cd ai-agent-dashboard\nExecuted: 2026-02-05T19:47:10.000Z"
     }
   ],
-  "generated": "2026-02-05T19:16:37.000Z"
+  "generated": "2026-02-05T20:07:10.000Z"
 }
