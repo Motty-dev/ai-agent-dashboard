@@ -7,29 +7,72 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Inter', sans-serif; }
+        * { 
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
         
-        /* Mobile sidebar animation */
+        body {
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            overscroll-behavior: none;
+        }
+
+        /* Mobile-first responsive design */
         .sidebar-mobile {
             transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar-mobile.open {
             transform: translateX(0);
         }
-        
-        /* Task card animations */
+
+        /* Enhanced mobile touch targets */
+        .touch-target {
+            min-height: 48px;
+            min-width: 48px;
+        }
+
+        /* Better mobile card spacing */
+        @media (max-width: 640px) {
+            .mobile-card {
+                margin: 0.75rem;
+                padding: 1rem;
+            }
+            
+            .mobile-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .mobile-text-sm {
+                font-size: 0.875rem;
+            }
+            
+            .mobile-text-xs {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Task card improvements */
         .task-card {
             transition: all 0.2s ease;
+            touch-action: pan-y;
         }
         .task-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            transform: translateY(-1px);
         }
-        
-        /* Loading spinner */
+        .task-card:active {
+            transform: translateY(0);
+        }
+
+        /* Loading states */
         .loading-spinner {
             border: 2px solid #374151;
             border-top: 2px solid #3b82f6;
@@ -38,31 +81,69 @@
             height: 20px;
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Responsive breakpoints */
-        @media (max-width: 768px) {
-            .sidebar-desktop { display: none !important; }
-            .content-area { margin-left: 0 !important; }
-            .mobile-header { display: flex !important; }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
-        
-        @media (min-width: 769px) {
-            .sidebar-mobile { display: none !important; }
-            .mobile-header { display: none !important; }
+
+        /* Chart container responsiveness */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 200px;
+            }
+        }
+
+        /* Mobile navigation improvements */
+        .nav-item {
+            transition: all 0.2s ease;
+            border-radius: 12px;
+        }
+        .nav-item:active {
+            transform: scale(0.98);
+        }
+
+        /* Pull to refresh indicator */
+        .pull-refresh {
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+        }
+        .pull-refresh.visible {
+            transform: translateY(0);
+        }
+
+        /* Mobile-specific utilities */
+        .safe-area-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Improved backdrop */
+        .backdrop {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
     </style>
 </head>
-<body class="bg-gray-950 text-white min-h-screen">
+<body class="bg-gray-950 text-white min-h-screen safe-area-top safe-area-bottom">
     <!-- Mobile backdrop -->
-    <div id="mobile-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+    <div id="mobile-backdrop" class="fixed inset-0 bg-black/50 backdrop z-40 hidden"></div>
     
     <!-- Mobile Sidebar -->
-    <div id="mobile-sidebar" class="sidebar-mobile fixed left-0 top-0 h-full w-70 bg-gray-900/90 backdrop-blur-xl border-r border-gray-700/50 z-50 md:hidden">
+    <div id="mobile-sidebar" class="sidebar-mobile fixed left-0 top-0 h-full w-80 max-w-[85vw] bg-gray-900/95 backdrop-blur-xl border-r border-gray-700/50 z-50 safe-area-top">
         <div class="flex flex-col h-full">
             <!-- Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-800">
@@ -70,22 +151,67 @@
                     <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg"></div>
                     <span class="font-semibold text-white text-lg">AI Dashboard</span>
                 </div>
-                <button onclick="closeMobileSidebar()" class="text-gray-400 hover:text-white">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button onclick="closeMobileSidebar()" class="touch-target text-gray-400 hover:text-white p-2 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
             
             <!-- Mobile Navigation -->
-            <nav class="flex-1 px-4 py-6 space-y-2" id="mobile-nav">
-                <!-- Navigation items will be populated by JS -->
+            <nav class="flex-1 px-4 py-6 space-y-3" id="mobile-nav">
+                <a href="#" onclick="showPage('overview')" 
+                   class="nav-item flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg" 
+                   data-page="overview">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span class="font-medium text-lg">Overview</span>
+                </a>
+                
+                <a href="#" onclick="showPage('analytics')" 
+                   class="nav-item flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 text-gray-300 hover:text-white hover:bg-gray-800/50" 
+                   data-page="analytics">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                    <span class="font-medium text-lg">Analytics</span>
+                </a>
+                
+                <a href="#" onclick="showPage('tasks')" 
+                   class="nav-item flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 text-gray-300 hover:text-white hover:bg-gray-800/50" 
+                   data-page="tasks">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-medium text-lg">Tasks</span>
+                </a>
+                
+                <a href="#" onclick="showPage('sessions')" 
+                   class="nav-item flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 text-gray-300 hover:text-white hover:bg-gray-800/50" 
+                   data-page="sessions">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    <span class="font-medium text-lg">Sessions</span>
+                </a>
             </nav>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-gray-800 safe-area-bottom">
+                <button class="w-full flex items-center justify-start space-x-4 px-4 py-4 text-gray-400 hover:text-white rounded-xl transition-all touch-target">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span class="text-lg">Settings</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Desktop Sidebar -->
-    <div class="sidebar-desktop fixed left-0 top-0 h-full w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-700/50 hidden md:flex flex-col">
+    <!-- Desktop Sidebar - Hidden on mobile -->
+    <div class="hidden lg:flex fixed left-0 top-0 h-full w-64 bg-gray-900/90 backdrop-blur-xl border-r border-gray-700/50 flex-col z-30">
         <div class="flex flex-col h-full">
             <!-- Header -->
             <div class="p-6 border-b border-gray-800">
@@ -148,26 +274,31 @@
     </div>
 
     <!-- Main Content -->
-    <div class="content-area ml-0 md:ml-64 min-h-screen">
+    <div class="ml-0 lg:ml-64 min-h-screen">
         <!-- Mobile Header -->
-        <header class="mobile-header bg-gray-900/40 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-30 hidden">
+        <header class="lg:hidden bg-gray-900/40 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-30 safe-area-top">
             <div class="flex items-center justify-between px-4 py-3">
-                <button onclick="openMobileSidebar()" class="text-gray-400 hover:text-white">
+                <button onclick="openMobileSidebar()" class="touch-target text-gray-400 hover:text-white p-3 rounded-lg">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
                 <div class="flex items-center space-x-3">
-                    <div id="connection-status" class="flex items-center space-x-2">
+                    <div id="mobile-connection-status" class="flex items-center space-x-2">
                         <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                         <span class="text-xs text-green-500">Live</span>
                     </div>
+                    <button onclick="refreshData()" class="touch-target text-gray-400 hover:text-white p-2 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </header>
 
         <!-- Desktop Header -->
-        <header class="bg-gray-900/40 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-30 hidden md:block">
+        <header class="hidden lg:block bg-gray-900/40 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-30">
             <div class="flex items-center justify-between px-6 py-4">
                 <div class="flex items-center space-x-4">
                     <div class="relative">
@@ -204,11 +335,11 @@
         </header>
 
         <!-- Page Content -->
-        <main class="p-4 md:p-6">
+        <main class="p-4 lg:p-6 safe-area-bottom">
             <!-- Overview Page -->
             <div id="overview" class="page">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center space-x-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3 mb-4 sm:mb-0">
                         <svg class="text-blue-500 w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
@@ -217,7 +348,7 @@
                             <p class="text-gray-400">Monitor your AI agent's performance</p>
                         </div>
                     </div>
-                    <button onclick="refreshData()" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                    <button onclick="refreshData()" class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors touch-target w-full sm:w-auto">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
@@ -226,57 +357,57 @@
                 </div>
 
                 <!-- Quick Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-gray-400 text-sm">Active Sessions</p>
-                                <p class="text-2xl font-bold text-white" id="active-sessions">-</p>
+                <div class="mobile-grid grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-6">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                            <div class="mb-2 lg:mb-0">
+                                <p class="text-gray-400 text-xs lg:text-sm">Active Sessions</p>
+                                <p class="text-xl lg:text-2xl font-bold text-white" id="active-sessions">3</p>
                             </div>
-                            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-8 h-8 lg:w-12 lg:h-12 bg-green-500/20 rounded-lg flex items-center justify-center self-end lg:self-auto">
+                                <svg class="w-4 h-4 lg:w-6 lg:h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-gray-400 text-sm">Context Usage</p>
-                                <p class="text-2xl font-bold text-white" id="context-usage">-</p>
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                            <div class="mb-2 lg:mb-0">
+                                <p class="text-gray-400 text-xs lg:text-sm">Context Usage</p>
+                                <p class="text-xl lg:text-2xl font-bold text-white" id="context-usage">33%</p>
                             </div>
-                            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-8 h-8 lg:w-12 lg:h-12 bg-blue-500/20 rounded-lg flex items-center justify-center self-end lg:self-auto">
+                                <svg class="w-4 h-4 lg:w-6 lg:h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h2a2 2 0 01-2-2z"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-gray-400 text-sm">Today's Tokens</p>
-                                <p class="text-2xl font-bold text-white" id="tokens-today">-</p>
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                            <div class="mb-2 lg:mb-0">
+                                <p class="text-gray-400 text-xs lg:text-sm">Today's Tokens</p>
+                                <p class="text-xl lg:text-2xl font-bold text-white" id="tokens-today">24.1K</p>
                             </div>
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-8 h-8 lg:w-12 lg:h-12 bg-purple-500/20 rounded-lg flex items-center justify-center self-end lg:self-auto">
+                                <svg class="w-4 h-4 lg:w-6 lg:h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-gray-400 text-sm">Uptime</p>
-                                <p class="text-2xl font-bold text-white" id="uptime">-</p>
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                            <div class="mb-2 lg:mb-0">
+                                <p class="text-gray-400 text-xs lg:text-sm">Uptime</p>
+                                <p class="text-xl lg:text-2xl font-bold text-white" id="uptime">99.8%</p>
                             </div>
-                            <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-8 h-8 lg:w-12 lg:h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center self-end lg:self-auto">
+                                <svg class="w-4 h-4 lg:w-6 lg:h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
@@ -285,9 +416,9 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Bot Status -->
+                    <!-- Agent Status -->
                     <div class="lg:col-span-2">
-                        <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
+                        <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-3">
                                     <svg class="text-blue-500 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -296,23 +427,81 @@
                                     <h3 class="font-semibold text-white">Agent Status</h3>
                                 </div>
                                 <div id="agent-status" class="flex items-center space-x-2 text-green-500">
-                                    <div class="loading-spinner"></div>
-                                    <span class="text-sm">Loading...</span>
+                                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                    <span class="text-sm">Active</span>
                                 </div>
                             </div>
 
                             <div class="space-y-4" id="agent-details">
-                                <!-- Will be populated by JS -->
+                                <div class="flex items-center justify-between">
+                                    <span class="mobile-text-sm text-gray-400">Model</span>
+                                    <span class="mobile-text-sm text-white font-medium">claude-sonnet-4</span>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="mobile-text-sm text-gray-400">Context</span>
+                                        <span class="mobile-text-sm text-white font-medium">13,000 / 40,000</span>
+                                    </div>
+                                    <div class="w-full bg-gray-800 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: 33%"></div>
+                                    </div>
+                                    <div class="mobile-text-xs text-gray-500 mt-1">33% used</div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <span class="mobile-text-sm text-gray-400">Memory Files</span>
+                                    <span class="mobile-text-sm text-white font-medium">4 loaded</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <span class="mobile-text-sm text-gray-400">Version</span>
+                                    <span class="mobile-text-sm text-white font-medium">2026.1.24</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Activity Feed -->
                     <div class="lg:col-span-1">
-                        <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
+                        <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
                             <h3 class="font-semibold text-white mb-4">Recent Activity</h3>
                             <div class="space-y-3" id="activity-feed">
-                                <!-- Will be populated by JS -->
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div>
+                                        <p class="mobile-text-sm text-white">Dashboard deployed</p>
+                                        <p class="mobile-text-xs text-gray-400">Just now</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div>
+                                        <p class="mobile-text-sm text-white">Mobile optimized</p>
+                                        <p class="mobile-text-xs text-gray-400">2 min ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div>
+                                        <p class="mobile-text-sm text-white">Task board updated</p>
+                                        <p class="mobile-text-xs text-gray-400">5 min ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div>
+                                        <p class="mobile-text-sm text-white">Analytics enhanced</p>
+                                        <p class="mobile-text-xs text-gray-400">8 min ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div>
+                                        <p class="mobile-text-sm text-white">Real data connected</p>
+                                        <p class="mobile-text-xs text-gray-400">12 min ago</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -335,59 +524,65 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Token Usage Chart -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">Token Usage (Last 7 Days)</h3>
-                        <canvas id="tokenChart" height="200"></canvas>
+                        <div class="chart-container">
+                            <canvas id="tokenChart"></canvas>
+                        </div>
                     </div>
 
                     <!-- Session Duration Chart -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">Session Duration</h3>
-                        <canvas id="sessionChart" height="200"></canvas>
+                        <div class="chart-container">
+                            <canvas id="sessionChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="mobile-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Model Usage -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">Model Usage</h3>
-                        <canvas id="modelChart" height="200"></canvas>
+                        <div class="chart-container">
+                            <canvas id="modelChart"></canvas>
+                        </div>
                     </div>
 
                     <!-- Cost Analysis -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">Cost Analysis</h3>
                         <div class="space-y-3">
                             <div class="flex justify-between">
                                 <span class="text-gray-400">Today</span>
-                                <span class="text-green-400 font-medium" id="cost-today">$0.00</span>
+                                <span class="text-green-400 font-medium" id="cost-today">$2.45</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-400">This Week</span>
-                                <span class="text-green-400 font-medium" id="cost-week">$0.00</span>
+                                <span class="text-green-400 font-medium" id="cost-week">$18.32</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-400">This Month</span>
-                                <span class="text-green-400 font-medium" id="cost-month">$0.00</span>
+                                <span class="text-green-400 font-medium" id="cost-month">$67.89</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Performance Metrics -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">Performance</h3>
                         <div class="space-y-3">
                             <div class="flex justify-between">
                                 <span class="text-gray-400">Avg Response Time</span>
-                                <span class="text-white font-medium" id="avg-response">-</span>
+                                <span class="text-white font-medium" id="avg-response">1.2s</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-400">Success Rate</span>
-                                <span class="text-green-400 font-medium" id="success-rate">-</span>
+                                <span class="text-green-400 font-medium" id="success-rate">99.3%</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-400">Error Rate</span>
-                                <span class="text-red-400 font-medium" id="error-rate">-</span>
+                                <span class="text-red-400 font-medium" id="error-rate">0.7%</span>
                             </div>
                         </div>
                     </div>
@@ -396,8 +591,8 @@
 
             <!-- Tasks Page -->
             <div id="tasks" class="page hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center space-x-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3 mb-4 sm:mb-0">
                         <svg class="text-blue-500 w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -406,7 +601,7 @@
                             <p class="text-gray-400">Organize and track your work</p>
                         </div>
                     </div>
-                    <button onclick="addNewTask()" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                    <button onclick="addNewTask()" class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors touch-target w-full sm:w-auto">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
@@ -414,9 +609,9 @@
                     </button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- To Do Column -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">To Do</h3>
                         <div id="todo-tasks" class="space-y-3 min-h-[200px]">
                             <!-- Tasks will be populated by JS -->
@@ -424,7 +619,7 @@
                     </div>
 
                     <!-- In Progress Column -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">In Progress</h3>
                         <div id="progress-tasks" class="space-y-3 min-h-[200px]">
                             <!-- Tasks will be populated by JS -->
@@ -432,7 +627,7 @@
                     </div>
 
                     <!-- Done Column -->
-                    <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl p-6 border border-gray-700/50">
+                    <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl p-4 lg:p-6 border border-gray-700/50">
                         <h3 class="font-semibold text-white mb-4">Done</h3>
                         <div id="done-tasks" class="space-y-3 min-h-[200px]">
                             <!-- Tasks will be populated by JS -->
@@ -455,8 +650,14 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-900/30 backdrop-blur-xl rounded-xl border border-gray-700/50 overflow-hidden">
-                    <div class="overflow-x-auto">
+                <div class="mobile-card bg-gray-900/30 backdrop-blur-xl rounded-xl border border-gray-700/50 overflow-hidden">
+                    <!-- Mobile Session Cards -->
+                    <div class="lg:hidden" id="mobile-sessions">
+                        <!-- Will be populated by JS -->
+                    </div>
+                    
+                    <!-- Desktop Session Table -->
+                    <div class="hidden lg:block overflow-x-auto">
                         <table class="w-full">
                             <thead class="bg-gray-800/50">
                                 <tr>
@@ -479,31 +680,31 @@
     </div>
 
     <!-- Task Modal -->
-    <div id="task-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div id="task-modal" class="fixed inset-0 bg-black/50 backdrop z-50 hidden flex items-center justify-center p-4">
         <div class="bg-gray-900 rounded-xl border border-gray-700 p-6 w-full max-w-md">
             <h3 class="text-lg font-semibold text-white mb-4">Add New Task</h3>
             <form id="task-form">
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Title</label>
-                        <input type="text" id="task-title" class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:outline-none" required>
+                        <input type="text" id="task-title" class="w-full px-3 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:outline-none touch-target" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
-                        <textarea id="task-description" rows="3" class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:outline-none"></textarea>
+                        <textarea id="task-description" rows="3" class="w-full px-3 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:outline-none"></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Priority</label>
-                        <select id="task-priority" class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:outline-none">
+                        <select id="task-priority" class="w-full px-3 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:outline-none touch-target">
                             <option value="low">Low</option>
                             <option value="medium" selected>Medium</option>
                             <option value="high">High</option>
                         </select>
                     </div>
                 </div>
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="closeTaskModal()" class="px-4 py-2 text-gray-400 hover:text-white">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Add Task</button>
+                <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-6">
+                    <button type="button" onclick="closeTaskModal()" class="px-4 py-3 text-gray-400 hover:text-white rounded-lg touch-target">Cancel</button>
+                    <button type="submit" class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg touch-target">Add Task</button>
                 </div>
             </form>
         </div>
@@ -512,27 +713,25 @@
     <script>
         // Global variables
         let currentPage = 'overview';
-        let tasks = [];
+        let tasks = [
+            { id: 1, title: 'Fix responsive design', description: 'Mobile optimization and touch targets', status: 'done', priority: 'high' },
+            { id: 2, title: 'Add analytics charts', description: 'Implement Chart.js visualizations', status: 'progress', priority: 'medium' },
+            { id: 3, title: 'Real-time updates', description: 'Connect to live data APIs', status: 'todo', priority: 'high' },
+            { id: 4, title: 'Mobile optimization', description: 'Improve mobile UX and performance', status: 'progress', priority: 'medium' },
+            { id: 5, title: 'Push notifications', description: 'Implement service worker notifications', status: 'todo', priority: 'low' }
+        ];
         let lastDataUpdate = new Date();
         let refreshInterval;
         
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
-            loadMockData();
             setupEventListeners();
             startAutoRefresh();
-            duplicateNavigation();
         });
 
         function initializeApp() {
             showPage('overview');
-        }
-
-        function duplicateNavigation() {
-            const desktopNav = document.getElementById('desktop-nav');
-            const mobileNav = document.getElementById('mobile-nav');
-            mobileNav.innerHTML = desktopNav.innerHTML;
         }
 
         function setupEventListeners() {
@@ -545,8 +744,15 @@
             // Mobile backdrop click
             document.getElementById('mobile-backdrop').addEventListener('click', closeMobileSidebar);
 
-            // Refresh button
-            document.getElementById('refresh-btn').addEventListener('click', refreshData);
+            // Prevent zoom on double tap
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function (event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
         }
 
         function showPage(pageId) {
@@ -562,6 +768,9 @@
             // Update navigation
             updateNavigation(pageId);
             
+            // Close mobile sidebar
+            closeMobileSidebar();
+            
             // Load page-specific data
             if (pageId === 'analytics') {
                 setTimeout(initializeCharts, 100);
@@ -573,20 +782,21 @@
         }
 
         function updateNavigation(activePageId) {
-            // Update desktop navigation
-            document.querySelectorAll('#desktop-nav .nav-link').forEach(link => {
-                link.className = 'nav-link flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50';
-            });
-            
-            // Update mobile navigation
-            document.querySelectorAll('#mobile-nav .nav-link').forEach(link => {
-                link.className = 'nav-link flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50';
-            });
-            
-            // Highlight active nav items
-            const activeLinks = document.querySelectorAll(`[data-page="${activePageId}"]`);
-            activeLinks.forEach(link => {
-                link.className = 'nav-link flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-600/30';
+            // Update both desktop and mobile navigation
+            document.querySelectorAll('.nav-link, .nav-item').forEach(link => {
+                if (link.dataset.page === activePageId) {
+                    if (link.classList.contains('nav-item')) {
+                        link.className = 'nav-item flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg';
+                    } else {
+                        link.className = 'nav-link flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-600/30';
+                    }
+                } else {
+                    if (link.classList.contains('nav-item')) {
+                        link.className = 'nav-item flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 text-gray-300 hover:text-white hover:bg-gray-800/50';
+                    } else {
+                        link.className = 'nav-link flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50';
+                    }
+                }
             });
         }
 
@@ -594,123 +804,40 @@
         function openMobileSidebar() {
             document.getElementById('mobile-sidebar').classList.add('open');
             document.getElementById('mobile-backdrop').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
         }
 
         function closeMobileSidebar() {
             document.getElementById('mobile-sidebar').classList.remove('open');
             document.getElementById('mobile-backdrop').classList.add('hidden');
-        }
-
-        // Data loading functions
-        function loadMockData() {
-            // Quick stats
-            document.getElementById('active-sessions').textContent = '3';
-            document.getElementById('context-usage').textContent = '33%';
-            document.getElementById('tokens-today').textContent = '24.1K';
-            document.getElementById('uptime').textContent = '99.8%';
-
-            // Agent status
-            updateAgentStatus();
-            
-            // Activity feed
-            updateActivityFeed();
-
-            // Initialize sample tasks
-            tasks = [
-                { id: 1, title: 'Fix responsive design', description: 'Make sidebar work on desktop', status: 'done', priority: 'high' },
-                { id: 2, title: 'Add analytics charts', description: 'Implement Chart.js visualizations', status: 'progress', priority: 'medium' },
-                { id: 3, title: 'Real-time updates', description: 'Connect to live data APIs', status: 'todo', priority: 'high' },
-                { id: 4, title: 'Mobile optimization', description: 'Improve mobile experience', status: 'todo', priority: 'medium' }
-            ];
-
-            // Update last data time
-            updateLastUpdateTime();
-        }
-
-        function updateAgentStatus() {
-            const statusElement = document.getElementById('agent-status');
-            const detailsElement = document.getElementById('agent-details');
-            
-            statusElement.innerHTML = `
-                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span class="text-sm">Active</span>
-            `;
-            
-            detailsElement.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-400">Model</span>
-                    <span class="text-sm text-white font-medium">claude-sonnet-4</span>
-                </div>
-                
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm text-gray-400">Context</span>
-                        <span class="text-sm text-white font-medium">13,000 / 40,000</span>
-                    </div>
-                    <div class="w-full bg-gray-800 rounded-full h-2">
-                        <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: 33%"></div>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">33% used</div>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-400">Memory Files</span>
-                    <span class="text-sm text-white font-medium">4 loaded</span>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-400">Version</span>
-                    <span class="text-sm text-white font-medium">2026.1.24</span>
-                </div>
-            `;
-        }
-
-        function updateActivityFeed() {
-            const feedElement = document.getElementById('activity-feed');
-            const activities = [
-                { type: 'success', title: 'Dashboard deployed', time: 'Just now', color: 'green' },
-                { type: 'info', title: 'Analytics added', time: '2 min ago', color: 'blue' },
-                { type: 'warning', title: 'Task board created', time: '5 min ago', color: 'yellow' },
-                { type: 'info', title: 'Mobile sidebar fixed', time: '8 min ago', color: 'blue' },
-                { type: 'success', title: 'Real data connected', time: '12 min ago', color: 'green' }
-            ];
-
-            feedElement.innerHTML = activities.map(activity => `
-                <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-${activity.color}-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                        <p class="text-sm text-white">${activity.title}</p>
-                        <p class="text-xs text-gray-400">${activity.time}</p>
-                    </div>
-                </div>
-            `).join('');
+            document.body.style.overflow = ''; // Restore scrolling
         }
 
         function refreshData() {
             // Show loading state
-            const refreshBtn = document.getElementById('refresh-btn');
-            const originalHTML = refreshBtn.innerHTML;
-            
-            refreshBtn.innerHTML = '<div class="loading-spinner"></div>';
-            refreshBtn.disabled = true;
-            
-            // Simulate data refresh
-            setTimeout(() => {
-                loadMockData();
-                updateLastUpdateTime();
+            const refreshBtns = document.querySelectorAll('button[onclick="refreshData()"]');
+            refreshBtns.forEach(btn => {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+                btn.disabled = true;
                 
-                // Reset button
-                refreshBtn.innerHTML = originalHTML;
-                refreshBtn.disabled = false;
-                
-                // Show notification
-                showNotification('Data refreshed successfully', 'success');
-            }, 1000);
+                // Reset after delay
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                }, 1000);
+            });
+            
+            updateLastUpdateTime();
+            showNotification('Data refreshed successfully', 'success');
         }
 
         function updateLastUpdateTime() {
             lastDataUpdate = new Date();
-            document.getElementById('last-update').textContent = 'Just now';
+            const updateElement = document.getElementById('last-update');
+            if (updateElement) {
+                updateElement.textContent = 'Just now';
+            }
         }
 
         function startAutoRefresh() {
@@ -718,20 +845,43 @@
                 const now = new Date();
                 const diffMinutes = Math.floor((now - lastDataUpdate) / 1000 / 60);
                 
-                if (diffMinutes > 0) {
-                    document.getElementById('last-update').textContent = `${diffMinutes}m ago`;
+                const updateElement = document.getElementById('last-update');
+                if (updateElement && diffMinutes > 0) {
+                    updateElement.textContent = `${diffMinutes}m ago`;
                 }
-            }, 60000); // Update every minute
+            }, 60000);
         }
 
         // Analytics functions
         function initializeCharts() {
             if (typeof Chart === 'undefined') return;
             
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: false,
+                        labels: { color: '#9ca3af' }
+                    }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        grid: { color: '#374151' },
+                        ticks: { color: '#9ca3af', font: { size: 11 } }
+                    },
+                    x: { 
+                        grid: { color: '#374151' },
+                        ticks: { color: '#9ca3af', font: { size: 11 } }
+                    }
+                }
+            };
+
             // Token Usage Chart
             const tokenCtx = document.getElementById('tokenChart');
-            if (tokenCtx) {
-                new Chart(tokenCtx, {
+            if (tokenCtx && !tokenCtx.chart) {
+                tokenCtx.chart = new Chart(tokenCtx, {
                     type: 'line',
                     data: {
                         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -740,34 +890,18 @@
                             data: [12000, 19000, 15000, 25000, 22000, 30000, 24000],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true
+                            fill: true,
+                            tension: 0.4
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: { 
-                                beginAtZero: true,
-                                grid: { color: '#374151' },
-                                ticks: { color: '#9ca3af' }
-                            },
-                            x: { 
-                                grid: { color: '#374151' },
-                                ticks: { color: '#9ca3af' }
-                            }
-                        }
-                    }
+                    options: chartOptions
                 });
             }
 
             // Session Duration Chart
             const sessionCtx = document.getElementById('sessionChart');
-            if (sessionCtx) {
-                new Chart(sessionCtx, {
+            if (sessionCtx && !sessionCtx.chart) {
+                sessionCtx.chart = new Chart(sessionCtx, {
                     type: 'doughnut',
                     data: {
                         labels: ['< 5min', '5-15min', '15-30min', '> 30min'],
@@ -783,7 +917,7 @@
                         plugins: {
                             legend: {
                                 position: 'bottom',
-                                labels: { color: '#9ca3af', usePointStyle: true }
+                                labels: { color: '#9ca3af', usePointStyle: true, font: { size: 11 } }
                             }
                         }
                     }
@@ -792,8 +926,8 @@
 
             // Model Usage Chart
             const modelCtx = document.getElementById('modelChart');
-            if (modelCtx) {
-                new Chart(modelCtx, {
+            if (modelCtx && !modelCtx.chart) {
+                modelCtx.chart = new Chart(modelCtx, {
                     type: 'bar',
                     data: {
                         labels: ['Claude Sonnet', 'Claude Haiku', 'GPT-4'],
@@ -804,70 +938,44 @@
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
+                        ...chartOptions,
                         scales: {
-                            y: { 
-                                beginAtZero: true,
-                                grid: { color: '#374151' },
-                                ticks: { color: '#9ca3af' }
-                            },
+                            ...chartOptions.scales,
                             x: { 
                                 grid: { display: false },
-                                ticks: { color: '#9ca3af' }
+                                ticks: { color: '#9ca3af', font: { size: 11 } }
                             }
                         }
                     }
                 });
             }
-
-            // Update cost data
-            document.getElementById('cost-today').textContent = '$2.45';
-            document.getElementById('cost-week').textContent = '$18.32';
-            document.getElementById('cost-month').textContent = '$67.89';
-
-            // Update performance data
-            document.getElementById('avg-response').textContent = '1.2s';
-            document.getElementById('success-rate').textContent = '99.3%';
-            document.getElementById('error-rate').textContent = '0.7%';
         }
 
         // Task management functions
         function renderTasks() {
-            const todoContainer = document.getElementById('todo-tasks');
-            const progressContainer = document.getElementById('progress-tasks');
-            const doneContainer = document.getElementById('done-tasks');
+            const containers = {
+                'todo': document.getElementById('todo-tasks'),
+                'progress': document.getElementById('progress-tasks'),
+                'done': document.getElementById('done-tasks')
+            };
 
-            todoContainer.innerHTML = '';
-            progressContainer.innerHTML = '';
-            doneContainer.innerHTML = '';
-
-            tasks.forEach(task => {
-                const taskElement = createTaskElement(task);
-                
-                switch(task.status) {
-                    case 'todo':
-                        todoContainer.appendChild(taskElement);
-                        break;
-                    case 'progress':
-                        progressContainer.appendChild(taskElement);
-                        break;
-                    case 'done':
-                        doneContainer.appendChild(taskElement);
-                        break;
-                }
+            // Clear containers
+            Object.values(containers).forEach(container => {
+                container.innerHTML = '';
             });
 
-            // Initialize drag and drop
+            // Populate tasks
+            tasks.forEach(task => {
+                const taskElement = createTaskElement(task);
+                containers[task.status]?.appendChild(taskElement);
+            });
+
             initializeDragAndDrop();
         }
 
         function createTaskElement(task) {
             const taskDiv = document.createElement('div');
-            taskDiv.className = 'task-card bg-gray-800/50 rounded-lg p-4 border border-gray-700/50 cursor-move';
+            taskDiv.className = 'task-card bg-gray-800/50 rounded-lg p-4 border border-gray-700/50 cursor-move touch-target';
             taskDiv.draggable = true;
             taskDiv.dataset.taskId = task.id;
 
@@ -879,17 +987,17 @@
 
             taskDiv.innerHTML = `
                 <div class="flex items-start justify-between mb-2">
-                    <h4 class="font-medium text-white text-sm">${task.title}</h4>
-                    <div class="flex items-center space-x-2">
+                    <h4 class="font-medium text-white text-sm flex-1 mr-2">${task.title}</h4>
+                    <div class="flex items-center space-x-2 flex-shrink-0">
                         <div class="w-2 h-2 ${priorityColors[task.priority]} rounded-full"></div>
-                        <button onclick="deleteTask(${task.id})" class="text-gray-400 hover:text-red-400 text-xs">
+                        <button onclick="deleteTask(${task.id})" class="text-gray-400 hover:text-red-400 touch-target p-1">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
                     </div>
                 </div>
-                ${task.description ? `<p class="text-gray-400 text-xs mb-2">${task.description}</p>` : ''}
+                ${task.description ? `<p class="text-gray-400 text-xs mb-3">${task.description}</p>` : ''}
                 <div class="flex items-center justify-between">
                     <span class="text-xs text-gray-500 capitalize">${task.priority} priority</span>
                 </div>
@@ -905,11 +1013,12 @@
             
             containers.forEach(containerId => {
                 const container = document.getElementById(containerId);
-                if (container) {
-                    new Sortable(container, {
+                if (container && !container.sortable) {
+                    container.sortable = new Sortable(container, {
                         group: 'tasks',
                         animation: 150,
                         ghostClass: 'opacity-50',
+                        chosenClass: 'scale-105',
                         onEnd: function(evt) {
                             const taskId = parseInt(evt.item.dataset.taskId);
                             const newStatus = evt.to.id.replace('-tasks', '');
@@ -930,11 +1039,13 @@
 
         function addNewTask() {
             document.getElementById('task-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeTaskModal() {
             document.getElementById('task-modal').classList.add('hidden');
             document.getElementById('task-form').reset();
+            document.body.style.overflow = '';
         }
 
         function createTask() {
@@ -966,43 +1077,87 @@
 
         // Sessions functions
         function loadSessions() {
-            const sessionsTable = document.getElementById('sessions-table');
             const mockSessions = [
                 { id: 'main:abc123', channel: 'Telegram', duration: '2h 15m', messages: 47, context: '13k/40k', status: 'Active' },
                 { id: 'sub:def456', channel: 'Discord', duration: '45m', messages: 23, context: '8k/40k', status: 'Active' },
                 { id: 'main:ghi789', channel: 'Web', duration: '1h 32m', messages: 31, context: '11k/40k', status: 'Idle' }
             ];
 
-            sessionsTable.innerHTML = mockSessions.map(session => `
-                <tr class="hover:bg-gray-800/50">
-                    <td class="px-6 py-3 text-sm font-mono text-gray-300">${session.id}</td>
-                    <td class="px-6 py-3 text-sm text-white">${session.channel}</td>
-                    <td class="px-6 py-3 text-sm text-gray-300">${session.duration}</td>
-                    <td class="px-6 py-3 text-sm text-gray-300">${session.messages}</td>
-                    <td class="px-6 py-3 text-sm text-gray-300">${session.context}</td>
-                    <td class="px-6 py-3">
-                        <span class="px-2 py-1 text-xs rounded-full ${session.status === 'Active' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">${session.status}</span>
-                    </td>
-                </tr>
-            `).join('');
+            // Desktop table
+            const sessionsTable = document.getElementById('sessions-table');
+            if (sessionsTable) {
+                sessionsTable.innerHTML = mockSessions.map(session => `
+                    <tr class="hover:bg-gray-800/50">
+                        <td class="px-6 py-3 text-sm font-mono text-gray-300">${session.id}</td>
+                        <td class="px-6 py-3 text-sm text-white">${session.channel}</td>
+                        <td class="px-6 py-3 text-sm text-gray-300">${session.duration}</td>
+                        <td class="px-6 py-3 text-sm text-gray-300">${session.messages}</td>
+                        <td class="px-6 py-3 text-sm text-gray-300">${session.context}</td>
+                        <td class="px-6 py-3">
+                            <span class="px-2 py-1 text-xs rounded-full ${session.status === 'Active' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">${session.status}</span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Mobile cards
+            const mobileSessions = document.getElementById('mobile-sessions');
+            if (mobileSessions) {
+                mobileSessions.innerHTML = mockSessions.map(session => `
+                    <div class="p-4 border-b border-gray-700/50 last:border-b-0">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-medium text-white text-sm">${session.channel}</h4>
+                            <span class="px-2 py-1 text-xs rounded-full ${session.status === 'Active' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">${session.status}</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-mono mb-2">${session.id}</p>
+                        <div class="grid grid-cols-3 gap-4 text-xs">
+                            <div>
+                                <span class="text-gray-400">Duration:</span>
+                                <div class="text-white">${session.duration}</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">Messages:</span>
+                                <div class="text-white">${session.messages}</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">Context:</span>
+                                <div class="text-white">${session.context}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         // Utility functions
         function showNotification(message, type = 'info') {
-            // Create notification element
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 px-4 py-2 rounded-lg text-white z-50 ${type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}`;
+            notification.className = `fixed top-4 right-4 px-4 py-3 rounded-lg text-white z-50 transform transition-all duration-300 translate-x-full ${type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}`;
             notification.textContent = message;
             
             document.body.appendChild(notification);
             
             // Animate in
-            setTimeout(() => notification.classList.add('animate-pulse'), 100);
-            
-            // Remove after 3 seconds
             setTimeout(() => {
-                notification.remove();
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
             }, 3000);
+        }
+
+        // Service worker registration for PWA capabilities
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful');
+                }, function(err) {
+                    console.log('ServiceWorker registration failed');
+                });
+            });
         }
     </script>
 </body>
