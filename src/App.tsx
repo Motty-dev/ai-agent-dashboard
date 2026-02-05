@@ -37,7 +37,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
           />
         )}
       </AnimatePresence>
@@ -47,7 +47,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         initial={{ x: -280 }}
         animate={{ x: isOpen ? 0 : -280 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed left-0 top-0 h-full w-70 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50 z-50 lg:hidden"
+        className="fixed left-0 top-0 h-full w-70 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50 z-50 md:hidden"
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -102,7 +102,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
       </motion.div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex flex-col h-full w-64 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50">
+      <div className="hidden md:flex flex-col h-full w-64 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50">
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-800">
@@ -158,12 +158,12 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
             variant="ghost"
             size="sm"
             onClick={onMenuClick}
-            className="lg:hidden text-gray-400 hover:text-white"
+            className="md:hidden text-gray-400 hover:text-white"
           >
             <Menu size={20} />
           </Button>
           
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
               <input
