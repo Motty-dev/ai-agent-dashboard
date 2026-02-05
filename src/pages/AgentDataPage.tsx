@@ -13,7 +13,7 @@ export default function AgentDataPage() {
 
       {/* Placeholder cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <Server className="text-green-500" size={24} />
             <h3 className="font-semibold">Active Agents</h3>
@@ -22,7 +22,7 @@ export default function AgentDataPage() {
           <p className="text-sm text-gray-400">Currently running</p>
         </div>
 
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <Zap className="text-yellow-500" size={24} />
             <h3 className="font-semibold">Token Usage</h3>
@@ -31,7 +31,7 @@ export default function AgentDataPage() {
           <p className="text-sm text-gray-400">This month</p>
         </div>
 
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <Clock className="text-blue-500" size={24} />
             <h3 className="font-semibold">Avg Response</h3>
@@ -40,7 +40,7 @@ export default function AgentDataPage() {
           <p className="text-sm text-gray-400">Response time</p>
         </div>
 
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <Activity className="text-purple-500" size={24} />
             <h3 className="font-semibold">Sessions</h3>
@@ -50,7 +50,7 @@ export default function AgentDataPage() {
         </div>
       </div>
 
-      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+      <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40">
         <h2 className="text-xl font-semibold mb-4">Coming Soon</h2>
         <div className="space-y-2 text-gray-400">
           <p>• Real-time agent status monitoring</p>
