@@ -2,6 +2,7 @@
   "name": "ai-agent-dashboard",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://motty-dev.github.io/ai-agent-dashboard",
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "clsx": "^2.1.1",
