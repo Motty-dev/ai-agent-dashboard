@@ -44,7 +44,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         initial={{ x: -280 }}
         animate={{ x: isOpen ? 0 : -280 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed left-0 top-0 h-full w-70 bg-gray-950 border-r border-gray-800 z-50 lg:static lg:translate-x-0 lg:z-0"
+        className="fixed left-0 top-0 h-full w-70 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50 z-50 lg:static lg:translate-x-0 lg:z-0"
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -71,10 +71,10 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
                 to={item.href}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                  `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 transform hover:scale-[1.02] ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-600/30'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800/50 backdrop-blur-sm'
                   }`
                 }
               >
@@ -103,7 +103,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
 
 function Header({ onMenuClick }: { onMenuClick: () => void }) {
   return (
-    <header className="bg-gray-900/80 backdrop-blur-sm border-b border-gray-800 sticky top-0 z-30">
+    <header className="backdrop-blur-xl bg-gray-900/40 border-b border-gray-700/50 sticky top-0 z-30">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center space-x-4">
           <Button

@@ -25,7 +25,7 @@ export default function KnowledgePage() {
 
       {/* Knowledge stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <FileText className="text-blue-500" size={24} />
             <h3 className="font-semibold">Documents</h3>
@@ -34,7 +34,7 @@ export default function KnowledgePage() {
           <p className="text-sm text-gray-400">Total files</p>
         </div>
 
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <Folder className="text-green-500" size={24} />
             <h3 className="font-semibold">Categories</h3>
@@ -43,7 +43,7 @@ export default function KnowledgePage() {
           <p className="text-sm text-gray-400">Organized</p>
         </div>
 
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <Brain className="text-purple-500" size={24} />
             <h3 className="font-semibold">Insights</h3>
@@ -52,7 +52,7 @@ export default function KnowledgePage() {
           <p className="text-sm text-gray-400">AI generated</p>
         </div>
 
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <BarChart3 className="text-orange-500" size={24} />
             <h3 className="font-semibold">Analytics</h3>
@@ -65,7 +65,7 @@ export default function KnowledgePage() {
       {/* Knowledge grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent uploads */}
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40">
           <div className="flex items-center space-x-3 mb-6">
             <Upload className="text-blue-500" size={20} />
             <h3 className="font-semibold text-white">Recent Uploads</h3>
@@ -95,7 +95,7 @@ export default function KnowledgePage() {
         </div>
 
         {/* AI Insights */}
-        <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40">
           <div className="flex items-center space-x-3 mb-6">
             <Brain className="text-purple-500" size={20} />
             <h3 className="font-semibold text-white">AI Insights</h3>
