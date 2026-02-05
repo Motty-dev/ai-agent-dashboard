@@ -31,6 +31,8 @@
     "dev": "vite",
     "fetch-data": "node api/fetch-data.js",
     "build": "npm run fetch-data && tsc && vite build",
+    "build:ci": "npm run create-mock-data && tsc && vite build",
+    "create-mock-data": "node api/create-mock-data.js",
     "preview": "vite preview"
   },
   "browserslist": {
