@@ -5,6 +5,12 @@ const path = require('path');
 
 function runScript(scriptPath) {
   try {
+    // Check if we're in CI environment - if so, skip bash scripts
+    if (process.env.CI || process.env.GITHUB_ACTIONS) {
+      console.log(`Skipping ${scriptPath} in CI environment`);
+      return null;
+    }
+    
     const result = execSync(`bash ${scriptPath}`, { encoding: 'utf-8' });
     return JSON.parse(result);
   } catch (error) {

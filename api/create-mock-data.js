@@ -2,10 +2,16 @@
 const fs = require('fs');
 const path = require('path');
 
-// Create data directory
-const dataDir = path.join(__dirname, '..', 'public', 'api');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
+// Create data directories
+const publicDataDir = path.join(__dirname, '..', 'public', 'api');
+const distDataDir = path.join(__dirname, '..', 'dist', 'api');
+
+if (!fs.existsSync(publicDataDir)) {
+  fs.mkdirSync(publicDataDir, { recursive: true });
+}
+
+if (!fs.existsSync(path.join(__dirname, '..', 'public'))) {
+  fs.mkdirSync(path.join(__dirname, '..', 'public'), { recursive: true });
 }
 
 // Mock bot status data
@@ -94,10 +100,10 @@ const taskData = {
 };
 
 // Write all mock data files
-fs.writeFileSync(path.join(dataDir, 'bot-status.json'), JSON.stringify(botStatus, null, 2));
-fs.writeFileSync(path.join(dataDir, 'sessions-status.json'), JSON.stringify(sessionStatus, null, 2)); 
-fs.writeFileSync(path.join(dataDir, 'activity.json'), JSON.stringify(activityFeed, null, 2));
-fs.writeFileSync(path.join(dataDir, 'token-stats.json'), JSON.stringify(tokenStats, null, 2));
-fs.writeFileSync(path.join(dataDir, 'tasks.json'), JSON.stringify(taskData, null, 2));
+fs.writeFileSync(path.join(publicDataDir, 'bot-status.json'), JSON.stringify(botStatus, null, 2));
+fs.writeFileSync(path.join(publicDataDir, 'sessions-status.json'), JSON.stringify(sessionStatus, null, 2)); 
+fs.writeFileSync(path.join(publicDataDir, 'activity.json'), JSON.stringify(activityFeed, null, 2));
+fs.writeFileSync(path.join(publicDataDir, 'token-stats.json'), JSON.stringify(tokenStats, null, 2));
+fs.writeFileSync(path.join(publicDataDir, 'tasks.json'), JSON.stringify(taskData, null, 2));
 
 console.log('Mock data created for CI build');
