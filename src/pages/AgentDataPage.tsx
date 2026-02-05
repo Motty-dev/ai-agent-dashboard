@@ -1,4 +1,5 @@
-import { Activity, Server, Zap, Clock } from 'lucide-react'
+import { Activity, Zap, Clock } from 'lucide-react'
+import { BotStatus } from '../components/BotStatus'
 
 export default function AgentDataPage() {
   return (
@@ -11,24 +12,19 @@ export default function AgentDataPage() {
         </div>
       </div>
 
-      {/* Placeholder cards */}
+      {/* Real bot status + other metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
-          <div className="flex items-center space-x-3 mb-4">
-            <Server className="text-green-500" size={24} />
-            <h3 className="font-semibold">Active Agents</h3>
-          </div>
-          <p className="text-3xl font-bold text-green-500">12</p>
-          <p className="text-sm text-gray-400">Currently running</p>
+        <div className="md:col-span-2">
+          <BotStatus />
         </div>
 
         <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
           <div className="flex items-center space-x-3 mb-4">
             <Zap className="text-yellow-500" size={24} />
-            <h3 className="font-semibold">Token Usage</h3>
+            <h3 className="font-semibold">Today's Tokens</h3>
           </div>
-          <p className="text-3xl font-bold text-yellow-500">2.4M</p>
-          <p className="text-sm text-gray-400">This month</p>
+          <p className="text-3xl font-bold text-yellow-500">15.2K</p>
+          <p className="text-sm text-gray-400">This session</p>
         </div>
 
         <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
@@ -36,17 +32,8 @@ export default function AgentDataPage() {
             <Clock className="text-blue-500" size={24} />
             <h3 className="font-semibold">Avg Response</h3>
           </div>
-          <p className="text-3xl font-bold text-blue-500">234ms</p>
+          <p className="text-3xl font-bold text-blue-500">1.2s</p>
           <p className="text-sm text-gray-400">Response time</p>
-        </div>
-
-        <div className="backdrop-blur-xl bg-gray-900/30 rounded-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:bg-gray-800/40 hover:scale-[1.02]">
-          <div className="flex items-center space-x-3 mb-4">
-            <Activity className="text-purple-500" size={24} />
-            <h3 className="font-semibold">Sessions</h3>
-          </div>
-          <p className="text-3xl font-bold text-purple-500">89</p>
-          <p className="text-sm text-gray-400">Active sessions</p>
         </div>
       </div>
 
