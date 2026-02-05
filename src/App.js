@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Activity, 
-  BarChart3, 
   Brain, 
   CheckSquare, 
-  Clock, 
-  Coffee, 
-  Database, 
   Globe, 
   MessageSquare, 
   Moon, 
   Sun, 
-  TrendingUp, 
-  Users, 
   Zap 
 } from 'lucide-react';
 
