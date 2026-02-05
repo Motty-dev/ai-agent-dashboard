@@ -37,4 +37,10 @@ if (activityFeed) {
   fs.writeFileSync(path.join(dataDir, 'activity.json'), JSON.stringify(activityFeed, null, 2));
 }
 
+// Fetch token statistics
+const tokenStats = runScript(path.join(__dirname, '..', 'scripts', 'token-stats.sh'));
+if (tokenStats) {
+  fs.writeFileSync(path.join(dataDir, 'token-stats.json'), JSON.stringify(tokenStats, null, 2));
+}
+
 console.log('Real data fetched and saved to public/api/');

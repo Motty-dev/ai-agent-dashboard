@@ -5,6 +5,7 @@ import {
   Activity, 
   CheckSquare, 
   Database, 
+  TrendingUp,
   Menu,
   X,
   Settings,
@@ -16,9 +17,11 @@ import { Button } from './components/ui/Button'
 import AgentDataPage from './pages/AgentDataPage'
 import TasksPage from './pages/TasksPage'
 import KnowledgePage from './pages/KnowledgePage'
+import AnalyticsPage from './pages/AnalyticsPage'
 
 const navigation = [
   { name: 'Agent Data', href: '/', icon: Activity },
+  { name: 'Analytics', href: '/analytics', icon: TrendingUp },
   { name: 'Tasks', href: '/tasks', icon: CheckSquare },
   { name: 'Knowledge', href: '/knowledge', icon: Database },
 ]
@@ -178,6 +181,7 @@ function App() {
               <PageLayout>
                 <Routes>
                   <Route path="/" element={<AgentDataPage />} />
+                  <Route path="/analytics" element={<AnalyticsPage />} />
                   <Route path="/tasks" element={<TasksPage />} />
                   <Route path="/knowledge" element={<KnowledgePage />} />
                 </Routes>
