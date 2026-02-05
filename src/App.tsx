@@ -42,12 +42,12 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
+      {/* Sidebar - Mobile with animation */}
       <motion.div
         initial={{ x: -280 }}
         animate={{ x: isOpen ? 0 : -280 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed left-0 top-0 h-full w-70 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50 z-50 lg:static lg:translate-x-0 lg:z-0"
+        className="fixed left-0 top-0 h-full w-70 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50 z-50 lg:hidden"
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -60,7 +60,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="lg:hidden text-gray-400 hover:text-white"
+              className="text-gray-400 hover:text-white"
             >
               <X size={20} />
             </Button>
@@ -100,6 +100,51 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
           </div>
         </div>
       </motion.div>
+
+      {/* Sidebar - Desktop always visible */}
+      <div className="hidden lg:flex flex-col h-full w-64 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50">
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-800">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg"></div>
+              <span className="font-semibold text-white text-lg">AI Dashboard</span>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 px-4 py-6 space-y-2">
+            {navigation.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                className={({ isActive }) =>
+                  `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 transform hover:scale-[1.02] ${
+                    isActive
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-600/30'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800/50 backdrop-blur-sm'
+                  }`
+                }
+              >
+                <item.icon size={20} />
+                <span className="font-medium">{item.name}</span>
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Footer */}
+          <div className="p-4 border-t border-gray-800">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start text-gray-400 hover:text-white"
+            >
+              <Settings size={20} />
+              <span className="ml-3">Settings</span>
+            </Button>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
