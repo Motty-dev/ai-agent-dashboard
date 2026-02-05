@@ -1,6 +1,5 @@
-import React from 'react'
 import { CheckSquare, Plus, Calendar, User, AlertCircle } from 'lucide-react'
-import Button from '../components/ui/Button'
+import { Button } from '../components/ui/Button'
 
 export default function TasksPage() {
   return (

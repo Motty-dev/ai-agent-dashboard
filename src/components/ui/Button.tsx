@@ -21,104 +21,77 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     leftIcon,
     rightIcon,
     fullWidth = false,
-    animated = true,
+    animated = false,
     disabled,
     children,
     ...props
   }, ref) => {
-    const baseClasses = cn(
-      // Base styles
-      'inline-flex items-center justify-center',
-      'font-medium rounded-xl',
-      'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-      'transition-all duration-200',
-      'tap-highlight-none touch-manipulation',
-      'disabled:opacity-50 disabled:cursor-not-allowed',
-      'active:scale-[0.98]',
-      
-      // Size variants
-      {
-        'px-3 py-2 text-sm gap-2 h-9': size === 'sm',
-        'px-4 py-2.5 text-sm gap-2 h-10': size === 'md',
-        'px-6 py-3 text-base gap-3 h-12': size === 'lg',
-        'px-8 py-4 text-lg gap-3 h-14': size === 'xl',
-      },
-      
-      // Variant styles
-      {
-        // Primary
-        'bg-primary-600 text-white shadow-sm': variant === 'primary',
-        'hover:bg-primary-700 active:bg-primary-800': variant === 'primary' && !disabled,
-        'focus-visible:ring-primary-500': variant === 'primary',
-        
-        // Secondary
-        'bg-gray-100 text-gray-900 shadow-sm': variant === 'secondary',
-        'dark:bg-dark-elevated dark:text-dark-text': variant === 'secondary',
-        'hover:bg-gray-200 dark:hover:bg-gray-700': variant === 'secondary' && !disabled,
-        'focus-visible:ring-gray-500': variant === 'secondary',
-        
-        // Ghost
-        'text-gray-700 dark:text-dark-text': variant === 'ghost',
-        'hover:bg-gray-100 dark:hover:bg-dark-elevated': variant === 'ghost' && !disabled,
-        'focus-visible:ring-gray-500': variant === 'ghost',
-        
-        // Danger
-        'bg-red-600 text-white shadow-sm': variant === 'danger',
-        'hover:bg-red-700 active:bg-red-800': variant === 'danger' && !disabled,
-        'focus-visible:ring-red-500': variant === 'danger',
-        
-        // Outline
-        'border border-gray-300 text-gray-700': variant === 'outline',
-        'dark:border-dark-border dark:text-dark-text': variant === 'outline',
-        'hover:bg-gray-50 dark:hover:bg-dark-elevated': variant === 'outline' && !disabled,
-        'focus-visible:ring-gray-500': variant === 'outline',
-      },
-      
-      // Full width
-      fullWidth && 'w-full',
-      
-      className
-    )
-
-    const ButtonContent = () => (
+    const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
+    
+    const variants = {
+      primary: 'bg-primary text-primary-foreground shadow hover:bg-primary/90',
+      secondary: 'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
+      ghost: 'hover:bg-accent hover:text-accent-foreground',
+      outline: 'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
+      danger: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90'
+    }
+    
+    const sizes = {
+      sm: 'h-8 rounded-md px-3 text-xs',
+      md: 'h-9 px-4 py-2',
+      lg: 'h-10 rounded-md px-8',
+      xl: 'h-11 rounded-md px-8'
+    }
+    
+    const isDisabled = disabled || loading
+    
+    const buttonContent = (
       <>
+        {leftIcon && <span className="mr-2">{leftIcon}</span>}
         {loading && (
-          <motion.div
-            className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          />
+          <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
         )}
-        {leftIcon && !loading && leftIcon}
         {children}
-        {rightIcon && !loading && rightIcon}
+        {rightIcon && <span className="ml-2">{rightIcon}</span>}
       </>
     )
-
+    
     if (animated) {
       return (
         <motion.button
           ref={ref}
-          className={baseClasses}
-          disabled={disabled || loading}
-          whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
-          whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          {...props}
+          className={cn(
+            baseClasses,
+            variants[variant],
+            sizes[size],
+            fullWidth && 'w-full',
+            className
+          )}
+          disabled={isDisabled}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          type={props.type || 'button'}
+          onClick={props.onClick}
         >
-          <ButtonContent />
+          {buttonContent}
         </motion.button>
       )
     }
-
+    
     return (
       <button
         ref={ref}
-        className={baseClasses}
-        disabled={disabled || loading}
+        className={cn(
+          baseClasses,
+          variants[variant],
+          sizes[size],
+          fullWidth && 'w-full',
+          className
+        )}
+        disabled={isDisabled}
         {...props}
       >
-        <ButtonContent />
+        {buttonContent}
       </button>
     )
   }
@@ -126,4 +99,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button'
 
-export default Button
+export { Button }

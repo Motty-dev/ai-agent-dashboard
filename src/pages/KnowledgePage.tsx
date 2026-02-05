@@ -1,6 +1,5 @@
-import React from 'react'
 import { Database, Upload, Search, FileText, Folder, BarChart3, Brain } from 'lucide-react'
-import Button from '../components/ui/Button'
+import { Button } from '../components/ui/Button'
 
 export default function KnowledgePage() {
   return (

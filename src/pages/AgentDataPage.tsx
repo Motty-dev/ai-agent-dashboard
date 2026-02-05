@@ -1,4 +1,3 @@
-import React from 'react'
 import { Activity, Server, Zap, Clock } from 'lucide-react'
 
 export default function AgentDataPage() {

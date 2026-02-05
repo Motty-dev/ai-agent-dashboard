@@ -12,7 +12,7 @@ import {
   Search
 } from 'lucide-react'
 import { useState } from 'react'
-import Button from './components/ui/Button'
+import { Button } from './components/ui/Button'
 import AgentDataPage from './pages/AgentDataPage'
 import TasksPage from './pages/TasksPage'
 import KnowledgePage from './pages/KnowledgePage'
