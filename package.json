@@ -26,7 +26,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "fetch-data": "node api/fetch-data.js",
+    "build": "npm run fetch-data && tsc && vite build",
     "preview": "vite preview"
   },
   "browserslist": {

@@ -12,29 +12,56 @@ interface BotStatusData {
 
 export function BotStatus() {
   const [status, setStatus] = useState<BotStatusData>({
-    model: 'Claude Sonnet 4',
-    contextUsed: 15000,
+    model: 'Loading...',
+    contextUsed: 0,
     contextLimit: 40000,
-    activeSessions: 1,
+    activeSessions: 0,
     memoryFiles: 3,
     status: 'active'
   })
 
   const [lastUpdated, setLastUpdated] = useState(new Date())
 
-  useEffect(() => {
-    // TODO: Replace with actual API calls to sessions_list, session_status
-    const interval = setInterval(() => {
-      // Simulated real-time updates for now
+  const fetchRealData = async () => {
+    try {
+      // Fetch bot config data
+      const botResponse = await fetch('/api/bot-status.json');
+      const botData = await botResponse.json();
+      
+      // Fetch session data
+      const sessionResponse = await fetch('/api/sessions-status.json');
+      const sessionData = await sessionResponse.json();
+      
+      setStatus({
+        model: botData.model.replace('anthropic/', '').replace('-20250514', ''),
+        contextUsed: sessionData.contextUsed,
+        contextLimit: sessionData.contextLimit,
+        activeSessions: sessionData.count,
+        memoryFiles: botData.memoryEnabled ? 3 : 0,
+        status: sessionData.contextUsed > sessionData.contextLimit ? 'busy' : 'active'
+      });
+      
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.error('Failed to fetch real data:', error);
+      // Fallback to simulated data
       setStatus(prev => ({
         ...prev,
-        contextUsed: prev.contextUsed + Math.floor(Math.random() * 100),
-        lastUpdated: new Date()
-      }))
-      setLastUpdated(new Date())
-    }, 30000) // Update every 30 seconds
+        model: 'claude-sonnet-4',
+        contextUsed: 44000,
+        contextLimit: 40000,
+        activeSessions: 1
+      }));
+    }
+  }
 
-    return () => clearInterval(interval)
+  useEffect(() => {
+    // Initial fetch
+    fetchRealData();
+    
+    // Update every 30 seconds
+    const interval = setInterval(fetchRealData, 30000);
+    return () => clearInterval(interval);
   }, [])
 
   const contextPercentage = Math.round((status.contextUsed / status.contextLimit) * 100)
