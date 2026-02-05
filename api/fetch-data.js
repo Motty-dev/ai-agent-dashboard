@@ -31,4 +31,10 @@ if (sessionStatus) {
   fs.writeFileSync(path.join(dataDir, 'sessions-status.json'), JSON.stringify(sessionStatus, null, 2));
 }
 
+// Fetch activity feed
+const activityFeed = runScript(path.join(__dirname, '..', 'scripts', 'activity-feed.sh'));
+if (activityFeed) {
+  fs.writeFileSync(path.join(dataDir, 'activity.json'), JSON.stringify(activityFeed, null, 2));
+}
+
 console.log('Real data fetched and saved to public/api/');
