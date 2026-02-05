@@ -42,7 +42,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         )}
       </AnimatePresence>
 
-      {/* Sidebar - Mobile with animation */}
+      {/* Mobile Sidebar */}
       <motion.div
         initial={{ x: -280 }}
         animate={{ x: isOpen ? 0 : -280 }}
@@ -101,7 +101,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         </div>
       </motion.div>
 
-      {/* Sidebar - Desktop always visible */}
+      {/* Desktop Sidebar */}
       <div className="hidden lg:flex flex-col h-full w-64 backdrop-blur-xl bg-gray-950/90 border-r border-gray-700/50">
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -219,7 +219,7 @@ function App() {
             onClose={() => setSidebarOpen(false)} 
           />
           
-          <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
+          <div className="flex-1 flex flex-col overflow-hidden">
             <Header onMenuClick={() => setSidebarOpen(true)} />
             
             <main className="flex-1 overflow-auto">
