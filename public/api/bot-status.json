@@ -1,5 +1,6 @@
 {
-  "model": "anthropic/claude-sonnet-4-20250514",
-  "contextLimit": 40000,
-  "memoryEnabled": true
+  "model": "claude-sonnet-4",
+  "memoryEnabled": true,
+  "status": "active",
+  "version": "2026.1.24"
 }
