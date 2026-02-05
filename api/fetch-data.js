@@ -43,4 +43,10 @@ if (tokenStats) {
   fs.writeFileSync(path.join(dataDir, 'token-stats.json'), JSON.stringify(tokenStats, null, 2));
 }
 
+// Fetch task data
+const taskData = runScript(path.join(__dirname, '..', 'scripts', 'task-manager.sh'));
+if (taskData) {
+  fs.writeFileSync(path.join(dataDir, 'tasks.json'), JSON.stringify(taskData, null, 2));
+}
+
 console.log('Real data fetched and saved to public/api/');
