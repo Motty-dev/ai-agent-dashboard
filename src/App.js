@@ -11,8 +11,6 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
-  console.log('Dashboard component rendering...');
-  
   const [isDark, setIsDark] = useState(true);
   const [activeTab, setActiveTab] = useState('agent-data');
   const [realTimeData, setRealTimeData] = useState({
@@ -21,8 +19,6 @@ const Dashboard = () => {
     uptime: '99.8%',
     activeConnections: 23
   });
-  
-  console.log('Dashboard state initialized');
 
   // Simulate real-time updates
   useEffect(() => {
